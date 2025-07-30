@@ -17,16 +17,21 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI volumeText;
     public TextMeshProUGUI evolumeText;
     public TextMeshProUGUI mvolumeText;
+    public TextMeshProUGUI roundNum;
+    public TextMeshProUGUI durabilityWarning;
+    public TextMeshProUGUI durabilityPercent;
     public Canvas settings;
     public Slider vol;
     public Slider evol;
     public Slider mvol;
+    public Slider durability;
     public Image up;
     public Image down;
     public Image left;
     public Image right;
     public Image brake;
     public float time;
+    public float durabilityTime;
     public Vector3 preLeaveVel;
     public Rigidbody rb;
     bool watchActive = false;
@@ -54,7 +59,7 @@ public class UIManager : MonoBehaviour
 
     public virtual void changeText(float speed)
     {
-        float s = speed * 2.23694f;
+        float s = speed * -2.23694f;
         mph.text = Mathf.Clamp(Mathf.Round(s), 0f, 1000f) + "MPH";
     }
 

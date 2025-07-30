@@ -9,6 +9,7 @@ TagManager:
   - Checkpoint
   - Start
   - End
+  - PitStop
   layers:
   - Default
   - TransparentFX
