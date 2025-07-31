@@ -104,21 +104,6 @@ public class LeaderboardManager : MonoBehaviour
                 }
             });
         }
-        if (sceneNum == 7)
-        {
-            Leaderboards.tutorial.GetEntries(entries =>
-            {
-                foreach (var t in _entryTextObjects)
-                {
-                    t.text = "";
-                }
-                var length = Mathf.Min(_entryTextObjects.Length, entries.Length);
-                for (int i = 0; i < length; i++)
-                {
-                    _entryTextObjects[i].text = $"{entries[i].Rank}. {entries[i].Username} - {entries[i].Score} ms";
-                }
-            });
-        }
     }
 
     public void UploadEntry(float Score)
@@ -167,16 +152,6 @@ public class LeaderboardManager : MonoBehaviour
         if (sceneNum == 6)
         {
             Leaderboards.lvl5.UploadNewEntry(_usernameInputField.text, (int)(Score * 100), isSuccessful =>
-            {
-                if (isSuccessful)
-                {
-                    LoadEntries();
-                }
-            });
-        }
-        if (sceneNum == 7)
-        {
-            Leaderboards.tutorial.UploadNewEntry(_usernameInputField.text, (int)(Score * 100), isSuccessful =>
             {
                 if (isSuccessful)
                 {

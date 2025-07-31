@@ -8,12 +8,6 @@ public class CameraManager : MonoBehaviour
     public GameObject focus;
     [SerializeField]
     public Rigidbody rb;
-    public float distance = 7f;
-    public float height = 2f;
-    public float dampening = 0.01f;
-    public float h2 = 0f;
-    public float d2 = 0f;
-    public float l = 0f;
 
     private void Start()
     {

@@ -9,7 +9,6 @@ public class AudioScript : MonoBehaviour
     public float runningMaxPitch;
     public AudioSource revSound;
     public AudioSource startSound;
-    public AudioClip startSoundClip;
     public float startVolume;
 
     public Rigidbody rb;
@@ -66,13 +65,9 @@ public class AudioScript : MonoBehaviour
     public void StartEngine()
     {
         engine = false;
-        AudioSource audioSource = Instantiate(startSound, transform.position, Quaternion.identity);
-        audioSource.clip = startSoundClip;
-        audioSource.volume = startVolume * gameVolume;
-        audioSource.Play();
-        StartCoroutine(wait(audioSource.clip.length));
-        Destroy(audioSource.gameObject, audioSource.clip.length);
-
+        startSound.volume = startVolume * gameVolume;
+        startSound.Play();
+        StartCoroutine(wait(startSound.clip.length));
     }
 
     IEnumerator wait(float n)

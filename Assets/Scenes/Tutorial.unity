@@ -12921,13 +12921,18 @@ MonoBehaviour:
   boosterBuff: 50
   rb: {fileID: 374904224}
   lastCheckpoint: {fileID: 0}
+  startArea: {fileID: 0}
   uim: {fileID: 413552612}
   lm: {fileID: 2057082712}
   am: {fileID: 374904225}
   submit: {fileID: 1622040214}
   newScore: {fileID: 1709970677}
   checks: 000000000100000002000000020000000100000001000000
+  checkPoints: []
   checkpointNum: 0
+  roundNum: 0
+  duraStart: 0
+  atPitStop: 0
 --- !u!114 &374904228
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12966,6 +12971,7 @@ MonoBehaviour:
   steeringWheels:
   - {fileID: 817219373}
   - {fileID: 634845380}
+  steeringWheelMeshes: []
   meshes:
   - {fileID: 206647516}
   - {fileID: 2029614666}
@@ -12998,7 +13004,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   throttle: 0
   steer: 0
-  l: 0
   brake: 0
 --- !u!65 &374904231
 BoxCollider:
@@ -13542,16 +13547,21 @@ MonoBehaviour:
   volumeText: {fileID: 1751792304}
   evolumeText: {fileID: 1168532890}
   mvolumeText: {fileID: 244801861}
+  roundNum: {fileID: 0}
+  durabilityWarning: {fileID: 0}
+  durabilityPercent: {fileID: 0}
   settings: {fileID: 924741738}
   vol: {fileID: 1073870133}
   evol: {fileID: 1278488862}
   mvol: {fileID: 36546586}
+  durability: {fileID: 0}
   up: {fileID: 1454617483}
   down: {fileID: 1938582837}
   left: {fileID: 1918980581}
   right: {fileID: 379525733}
   brake: {fileID: 168602454}
   time: 0
+  durabilityTime: 0
   preLeaveVel: {x: 0, y: 0, z: 0}
   rb: {fileID: 374904224}
   watchPrevActive: 0
@@ -17769,12 +17779,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   focus: {fileID: 374904223}
   rb: {fileID: 374904224}
-  distance: 5
-  height: 2
-  dampening: 1
-  h2: 1
-  d2: 0.2
-  l: -0.2
 --- !u!81 &811361565
 AudioListener:
   m_ObjectHideFlags: 0
