@@ -8,4 +8,25 @@ Then, select the git clone and you can open the game in the editor. Here, you ca
 outside of the editor, you can select Build and Run and choose your device type (Make sure to have the build settings for your device downloaded). This will
 create an application which you can play.
 
+The leaderboard system made by Danqzq contains a public key and secret key for each leaderboard. If you wish to modify the game you will need the create your
+own leaderboards on the danqzq leaderboard site and input your own public and secret keys for the leaderboards you create.
+
+Controls:
+Movement - WASD or Arrow Keys
+Braking - Space Bar
+Settings - Escape
+
+Game Objective:
+You must drive an f1 car through three laps of five different circuits. You must pass through all checkpoints before completing each lap and your goal is
+to complete the entire race as fast as possible. Make sure to keep track of your tire durability and tire compound to complete the objective. If your tire
+durability gets low or reaches zero, stop at the pitstop near the start of the circuit to change tires (make sure to slow your car down to a stop).
+
+Areas for improvement:
+- More F1 components
+- Even better physics system
+- More levels!
+- More obstacles
+- More customization
+- More songs
+
 I had a really great time making this game and I hope that you all enjoy ;)!
