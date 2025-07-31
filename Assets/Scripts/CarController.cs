@@ -29,6 +29,8 @@ public class CarController: MonoBehaviour
 
     void Start()
     {
+        strengthCoefficient = 2500;
+        brakeStrength = 10000;
         im = GetComponent<InputManager>();
         rb = GetComponent<Rigidbody>();
         lastTorque = 0;
@@ -62,10 +64,13 @@ public class CarController: MonoBehaviour
             {
                 if (uim.durability.value > 0)
                 {
-                    uim.durabilityWarning.gameObject.SetActive(false);
-                    wheel.motorTorque = strengthCoefficient * im.throttle;
-                    currTorque = im.throttle;
-                    wheel.brakeTorque = 0f;
+                    if (!uim.pitStop.isActiveAndEnabled)
+                    {
+                        uim.durabilityWarning.gameObject.SetActive(false);
+                        wheel.motorTorque = strengthCoefficient * im.throttle;
+                        currTorque = im.throttle;
+                        wheel.brakeTorque = 0f;
+                    }
                 }
                 else
                 {
@@ -88,14 +93,8 @@ public class CarController: MonoBehaviour
             WheelFrictionCurve forward = wheel.forwardFriction;
             if (wheel.GetGroundHit(out hit) && hit.collider.gameObject.tag == "Ice")
             {
-                forward.extremumSlip = 1f;
-                forward.extremumValue = 1f;
-                forward.asymptoteSlip = 1f;
-                forward.asymptoteValue = 1f;
-                sideways.extremumSlip = 0.1f;
-                sideways.extremumValue = 0.1f;
-                sideways.asymptoteSlip = 0.1f;
-                sideways.asymptoteValue = 0.1f;
+                forward.stiffness = 1f;
+                sideways.stiffness = 1f;
                 wheel.forwardFriction = forward;
                 wheel.sidewaysFriction = sideways;
             }
@@ -119,7 +118,7 @@ public class CarController: MonoBehaviour
         {
             mesh.transform.Rotate(rb.velocity.magnitude * (transform.InverseTransformDirection(rb.velocity).z >= 0 ? -1 : 1) / (2 * Mathf.PI * 0.8f), 0f, 0f);
         }
-        if (lastTorque == 0 && im.throttle > 0 && speed < 1 && !im.brake)
+        if (lastTorque == 0 && im.throttle > 0 && speed < 1 && !im.brake && !am.startSound.isPlaying)
         {
             am.StartEngine();
         }    
@@ -133,84 +132,16 @@ public class CarController: MonoBehaviour
         WheelFrictionCurve forward = wheel.forwardFriction;
 
         int tireNum = PlayerPrefs.GetInt("Tire");
-        if (tireNum == 0)
-        {
-            forward.extremumSlip = 0.2f;
-            forward.extremumValue = 2.3f;
-            forward.asymptoteSlip = 0.5f;
-            forward.asymptoteValue = 1.2f;
-            sideways.extremumSlip = 0.25f;
-            sideways.extremumValue = 2.8f;
-            sideways.asymptoteSlip = 0.5f;
-            sideways.asymptoteValue = 1.2f;
-            forward.stiffness = 1.5f;
-            sideways.stiffness = 2.0f;
-        }
-        if (tireNum == 1)
-        {
-            forward.extremumSlip = 0.22f;
-            forward.extremumValue = 2.7f;
-            forward.asymptoteSlip = 0.5f;
-            forward.asymptoteValue = 1.4f;
-            sideways.extremumSlip = 0.27f;
-            sideways.extremumValue = 3.0f;
-            sideways.asymptoteSlip = 0.5f;
-            sideways.asymptoteValue = 1.4f;
-            forward.stiffness = 1.4f;
-            sideways.stiffness = 1.0f;
-        }
-        if (tireNum == 2)
-        {
-            forward.extremumSlip = 0.25f;
-            forward.extremumValue = 2.8f;
-            forward.asymptoteSlip = 0.5f;
-            forward.asymptoteValue = 1.4f;
-            sideways.extremumSlip = 0.25f;
-            sideways.extremumValue = 3.0f;
-            sideways.asymptoteSlip = 0.5f;
-            sideways.asymptoteValue = 1.5f;
-            forward.stiffness = 1.3f;
-            sideways.stiffness = 1.2f;
-        }
-        if (tireNum == 3)
-        {
-            forward.extremumSlip = 0.22f;
-            forward.extremumValue = 3.2f;
-            forward.asymptoteSlip = 0.45f;
-            forward.asymptoteValue = 1.2f;
-            sideways.extremumSlip = 0.22f;
-            sideways.extremumValue = 3.5f;
-            sideways.asymptoteSlip = 0.45f;
-            sideways.asymptoteValue = 1.3f;
-            forward.stiffness = 1.2f;
-            sideways.stiffness = 1.7f;
-        }
-        if (tireNum == 4)
-        {
-            forward.extremumSlip = 0.18f;
-            forward.extremumValue = 3.6f;
-            forward.asymptoteSlip = 0.4f;
-            forward.asymptoteValue = 1.0f;
-            sideways.extremumSlip = 0.18f;
-            sideways.extremumValue = 3.9f;
-            sideways.asymptoteSlip = 0.4f;
-            sideways.asymptoteValue = 1.1f;
-            forward.stiffness = 1.1f;
-            sideways.stiffness = 2.2f;
-        }
-        if (tireNum == 5)
-        {
-            forward.extremumSlip = 0.15f;
-            forward.extremumValue = 3.8f;
-            forward.asymptoteSlip = 0.35f;
-            forward.asymptoteValue = 0.9f;
-            sideways.extremumSlip = 0.15f;
-            sideways.extremumValue = 4.1f;
-            sideways.asymptoteSlip = 0.35f;
-            sideways.asymptoteValue = 1.0f;
-            forward.stiffness = 1.0f;
-            sideways.stiffness = 2.7f;
-        }
+        forward.extremumSlip = 0.15f;
+        forward.extremumValue = 3.8f;
+        forward.asymptoteSlip = 0.35f;
+        forward.asymptoteValue = 0.9f;
+        sideways.extremumSlip = 0.65f;
+        sideways.extremumValue = 4.1f;
+        sideways.asymptoteSlip = 0.8f;
+        sideways.asymptoteValue = 1f;
+        forward.stiffness = 1.0f + tireNum * 0.05f;
+        sideways.stiffness = 2.7f + tireNum * 0.05f;
         wheel.forwardFriction = forward;
         wheel.sidewaysFriction = sideways;
     }

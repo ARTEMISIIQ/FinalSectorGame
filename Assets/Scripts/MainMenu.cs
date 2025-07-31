@@ -46,9 +46,5 @@ public class MainMenu : MonoBehaviour
         {
             bestTime5.text = PlayerPrefs.GetFloat("6") + " secs";
         }
-        if (PlayerPrefs.GetFloat("7") != 0)
-        {
-            bestTime6.text = PlayerPrefs.GetFloat("7") + " secs";
-        }
     }
 }

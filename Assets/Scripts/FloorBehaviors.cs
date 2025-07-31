@@ -23,12 +23,14 @@ public class FloorBehaviors : MonoBehaviour
     public Button submit;
     [SerializeField]
     private TextMeshProUGUI newScore;
+    public TextMeshProUGUI pitStopwatch;
     [SerializeField]
     public List<int> checks;
     public List<GameObject> checkPoints;
     float vel;
     public int checkpointNum;
     public int roundNum;
+    public float pitStopTime;
     bool boost = false;
     public bool duraStart;
     public bool atPitStop;
@@ -40,6 +42,7 @@ public class FloorBehaviors : MonoBehaviour
         duraStart = false;
         atPitStop = false;
         uim.durabilityTime = 100 + 20 * PlayerPrefs.GetFloat("Span");
+        pitStopwatch = uim.pitStopwatch;
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -84,14 +87,6 @@ public class FloorBehaviors : MonoBehaviour
             other.gameObject.SetActive(false);
             checkpointNum++;
         }
-        if (other.tag == "End") // End = TP
-        {
-            checkpointNum++;
-            transform.position = lastCheckpoint.position + lastCheckpoint.transform.TransformDirection(0, 0, -10);
-            transform.rotation = lastCheckpoint.rotation;
-            transform.Rotate(0, 180, 0);
-        }
-
     }
     private void OnTriggerStay(Collider other)
     {
@@ -104,8 +99,19 @@ public class FloorBehaviors : MonoBehaviour
             if (!atPitStop)
             {
                 atPitStop = true;
-                StartCoroutine(PitStop());
+                uim.stats.gameObject.SetActive(false);
+                uim.pitStop.gameObject.SetActive(true);
+                uim.durability.value = 1;
+                pitStopTime = 0;
             }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "PitStop")
+        {
+            atPitStop = false;
         }
     }
     IEnumerator Boost()
@@ -117,22 +123,20 @@ public class FloorBehaviors : MonoBehaviour
     }
     private void Update()
     {
+        pitStopTime = pitStopTime + Time.deltaTime;
         if (Input.GetKeyDown(KeyCode.R) && lastCheckpoint && (roundNum > 1 || checkpointNum > 0))
         {
             rb.constraints = RigidbodyConstraints.FreezeAll;
             transform.position = lastCheckpoint.position;
             transform.rotation = lastCheckpoint.rotation;
             rb.velocity = new Vector3(0, 0, 0);
-            transform.Rotate(0, 180, 0);
             rb.constraints = RigidbodyConstraints.None;
-            duraStart = false;
         }
         else if (Input.GetKeyDown(KeyCode.R) && lastCheckpoint)
         {
             rb.constraints = RigidbodyConstraints.FreezeAll;
             transform.position = lastCheckpoint.position + lastCheckpoint.transform.TransformDirection(0, 0, -10);
             transform.rotation = lastCheckpoint.rotation;
-            transform.Rotate(0, 180, 0);
             uim.StopWatch();
             uim.time = 0;
             rb.velocity = new Vector3(0, 0, 0);
@@ -145,6 +149,21 @@ public class FloorBehaviors : MonoBehaviour
             StartCoroutine(duraDecrease());
         }
         uim.durabilityPercent.text = Mathf.Round(uim.durability.value * 100).ToString() + "%";
+        if (pitStopTime < 60)
+        {
+            pitStopwatch.text = (Mathf.Round(pitStopTime * 10000) / 10000).ToString();
+        }
+        else
+        {
+            if ((pitStopTime % 60) > 10)
+            {
+                pitStopwatch.text = Mathf.Floor(pitStopTime / 60).ToString() + ":" + (Mathf.Round((pitStopTime % 60) * 10000) / 10000).ToString();
+            }
+            else
+            {
+                pitStopwatch.text = Mathf.Floor(pitStopTime / 60).ToString() + ":0" + (Mathf.Round((pitStopTime % 60) * 10000) / 10000).ToString();
+            }
+        }
     }
 
     IEnumerator duraDecrease()
@@ -155,13 +174,10 @@ public class FloorBehaviors : MonoBehaviour
         duraStart = true;
     }
 
-    IEnumerator PitStop()
+    public void leavePitStop()
     {
-        while (uim.durability.value < 1)
-        {
-            yield return new WaitForSeconds(0.05f);
-            uim.durability.value += 1 / uim.durabilityTime;
-        }
-        atPitStop = false;
-    }    
+        uim.stats.gameObject.SetActive(true);
+        uim.pitStop.gameObject.SetActive(false);
+        PlayerPrefs.SetInt("Tire", uim.tireNum);
+    }
 }

@@ -48,10 +48,8 @@ public class CarSelectionScript : MonoBehaviour
     {
         tireNumText.text = "Type C" + tireNum.ToString();
         GripVal.value = tireStats[tireNum * 3];
-        PlayerPrefs.SetFloat("Grip", GripVal.value);
         SoftVal.value = tireStats[tireNum * 3 + 1];
         SpanVal.value = tireStats[tireNum * 3 + 2];
-        PlayerPrefs.SetFloat("Span", SpanVal.value);
 
         PlayerPrefs.SetInt("Tire", tireNum);
         PlayerPrefs.SetFloat("Red", RedVal.value);
@@ -72,7 +70,6 @@ public class CarSelectionScript : MonoBehaviour
 
     public void leftButton()
     {
-        Debug.Log("left");
         tireNum--;
         if (tireNum < 0)
         {

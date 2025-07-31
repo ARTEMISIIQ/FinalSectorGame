@@ -7,11 +7,14 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    // Scripts
     [SerializeField]
     private AudioScript am;
 
+    // TMPros and UI
     public TextMeshProUGUI mph;
     public TextMeshProUGUI stopwatch;
+    public TextMeshProUGUI pitStopwatch;
     public TextMeshProUGUI fps;
     public TextMeshProUGUI restartTime;
     public TextMeshProUGUI volumeText;
@@ -20,24 +23,48 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI roundNum;
     public TextMeshProUGUI durabilityWarning;
     public TextMeshProUGUI durabilityPercent;
+    public TextMeshProUGUI tireNumText;
+    public TextMeshProUGUI compound;
+
     public Canvas settings;
+    public Canvas stats;
+    public Canvas pitStop;
+
     public Slider vol;
     public Slider evol;
     public Slider mvol;
     public Slider durability;
+    public Slider GripVal;
+    public Slider SoftVal;
+    public Slider SpanVal;
+
     public Image up;
     public Image down;
     public Image left;
     public Image right;
     public Image brake;
+
+    // Numbers
+    [SerializeField]
+    private int totalTires;
+    public int tireNum;
+
     public float time;
+    public float pitStopTime;
     public float durabilityTime;
+
+    public List<float> tireStats;
+
+    // Miscellaneous
     public Vector3 preLeaveVel;
+
     public Rigidbody rb;
-    bool watchActive = false;
+
+    public bool watchActive = false;
     public bool watchPrevActive = false;
+    public bool settingsActive;
+
     public AudioSource gameMusic;
-    bool settingsActive;
 
     private void Start()
     {
@@ -47,6 +74,7 @@ public class UIManager : MonoBehaviour
         {
             gameMusic.Play();
             DontDestroyOnLoad(gameMusic);
+            gameMusic.tag = "Finish";
         }
         else
         {
@@ -55,11 +83,13 @@ public class UIManager : MonoBehaviour
                 gameMusic = GameObject.FindWithTag("Finish").GetComponent<AudioSource>();
             }
         }
+        totalTires = 6;
+        tireNum = PlayerPrefs.GetInt("Tire");
     }
 
     public virtual void changeText(float speed)
     {
-        float s = speed * -2.23694f;
+        float s = speed * 2.23694f;
         mph.text = Mathf.Clamp(Mathf.Round(s), 0f, 1000f) + "MPH";
     }
 
@@ -159,6 +189,17 @@ public class UIManager : MonoBehaviour
             mvolumeText.text = "Music Volume: " + Mathf.Round((PlayerPrefs.GetFloat("Volume") > PlayerPrefs.GetFloat("Music") ? PlayerPrefs.GetFloat("Music") : PlayerPrefs.GetFloat("Volume")) * 100).ToString() + "%";
             mvol.value = PlayerPrefs.GetFloat("Volume") > PlayerPrefs.GetFloat("Music") ? PlayerPrefs.GetFloat("Music") : PlayerPrefs.GetFloat("Volume");
         }
+        if (tireNumText)
+        {
+            tireNumText.text = "Compound C" + tireNum.ToString();
+            GripVal.value = tireStats[tireNum * 3];
+            SoftVal.value = tireStats[tireNum * 3 + 1];
+            SpanVal.value = tireStats[tireNum * 3 + 2];
+        }
+        if (compound)
+        {
+            compound.text = "C" + PlayerPrefs.GetInt("Tire");
+        }
     }
 
     public void StartWatch()
@@ -221,5 +262,31 @@ public class UIManager : MonoBehaviour
             StartWatch();
         }
         rb.velocity = preLeaveVel;
+    }
+
+    public void rightButton()
+    {
+        tireNum++;
+        if (tireNum >= totalTires)
+        {
+            tireNum = 0;
+        }
+        tireNumText.text = "Compound C" + tireNum.ToString();
+        GripVal.value = tireStats[tireNum * 3];
+        SoftVal.value = tireStats[tireNum * 3 + 1];
+        SpanVal.value = tireStats[tireNum * 3 + 2];
+    }
+
+    public void leftButton()
+    {
+        tireNum--;
+        if (tireNum < 0)
+        {
+            tireNum = totalTires - 1;
+        }
+        tireNumText.text = "Compound C" + tireNum.ToString();
+        GripVal.value = tireStats[tireNum * 3];
+        SoftVal.value = tireStats[tireNum * 3 + 1];
+        SpanVal.value = tireStats[tireNum * 3 + 2];
     }
 }
