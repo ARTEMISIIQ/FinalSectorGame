@@ -12,9 +12,10 @@ The leaderboard system made by Danqzq contains a public key and secret key for e
 own leaderboards on the danqzq leaderboard site and input your own public and secret keys for the leaderboards you create.
 
 Controls:
-Movement - WASD or Arrow Keys
-Braking - Space Bar
-Settings - Escape
+- Movement: WASD or Arrow Keys
+- Braking: Space Bar
+- Go to last checkpoint: R
+- Settings: Escape
 
 Game Objective:
 You must drive an f1 car through three laps of five different circuits. You must pass through all checkpoints before completing each lap and your goal is
