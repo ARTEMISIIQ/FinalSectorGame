@@ -1,4 +1,4 @@
-Game Title: Risky Racers
+Game Title: Final Sector
 By: Ethan Tran
 
 The files in this repository contain the source code for the game that I created, Risky Racers, for the Roosevelt Racers' "Roosevelt Dev Prix". 
