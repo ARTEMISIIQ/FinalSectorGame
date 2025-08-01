@@ -30,4 +30,9 @@ Areas for improvement:
 - More customization
 - More songs
 
+Bug:
+On Circuit 5, the left and right buttons of the pit stop menu do not work for tire compound selection. To fix this bug, you need to enter into the editor go
+to the 5th circuit scene and select the left button which can be found inside of the pitStopCanvas. Scroll to the bottom and in the onClick section, drag the
+Canvas item onto the gameObject area and select UIManager and the function leftButton. Do the same exact process for the right button to fix it as well.
+
 I had a really great time making this game and I hope that you all enjoy ;)!
